@@ -1,6 +1,21 @@
+import { ModeToggle } from "@/components/ModeToggle";
+import { ThemeProvider } from "@/components/theme-provider";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+
+import { Toaster } from "@/components/ui/sonner";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { DropDownMenu } from "@/components/DropDownMenu";
+
+export const revalidate = 0;
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,8 +30,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang='en'>
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='dark'
+            enableSystem
+            disableTransitionOnChange>
+            <div className='p-4 sticky top-0 z-50 bg-transparent backdrop-filter backdrop-blur-md flex justify-between items-center gap-3'>
+              <div className='flex items-center divide-x-2 space-x-3'>
+                <ModeToggle />
+                <div className='pl-3'>
+                  <SignedOut>
+                    <SignInButton />
+                  </SignedOut>
+                  <SignedIn>
+                    <UserButton />
+                  </SignedIn>
+                </div>
+              </div>
+              <DropDownMenu />
+            </div>
+            <main>{children}</main>
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
