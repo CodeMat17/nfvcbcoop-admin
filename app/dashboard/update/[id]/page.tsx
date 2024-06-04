@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
+import { CircleArrowLeftIcon } from "lucide-react";
+import GoBackButton from "@/components/GoBackButton";
 
 export const revalidate = 0;
 
@@ -139,6 +141,9 @@ const IDPage = async ({ params: { id } }: Props) => {
             <EditPasscode id={id} code={data?.code} />
           </div>
         </div>
+      </div>
+      <div className='mt-12 flex justify-end'>
+        <GoBackButton />
       </div>
     </div>
   );

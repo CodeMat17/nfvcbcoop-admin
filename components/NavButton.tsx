@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 
 const NavButton = ({ href, tag }: { href: string; tag: string }) => {
   const pathname = usePathname();
-  console.log("PATH: ", pathname);
+
 
   return (
     <Button
