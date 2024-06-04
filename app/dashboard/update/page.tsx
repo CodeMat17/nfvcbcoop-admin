@@ -7,17 +7,29 @@ export const revalidate = 0;
 
 const Update = async () => {
   const supabase = createClient();
-   const { userId } = auth().protect();
-   const user = await clerkClient.users.getUser(userId);
+  const { userId } = auth().protect();
+  const user = await clerkClient.users.getUser(userId);
 
-   // const email = user?.primaryEmailAddress?.emailAddress;
-   // const firstName = email?.split("@")[0];
+  const PRESIDENT = process.env.PRESIDENT;
+  const PAUL = process.env.PAUL;
+  const TONY = process.env.TONY;
 
-   if (!user) return redirect("/sign-in");
+  const adminIds = [PRESIDENT, PAUL, TONY];
+  const isNorAdmin = !adminIds.includes(user.id);
+
+  // const email = user?.primaryEmailAddress?.emailAddress;
+  // const firstName = email?.split("@")[0];
+
+  if (!user) return redirect("/sign-in");
+
+  if (isNorAdmin) {
+    redirect("/dashboard");
+  }
 
   const { data, error } = await supabase
     .from("records")
-    .select("id, name, code, ippis_no").order('name', {ascending: true});
+    .select("id, name, code, ippis_no")
+    .order("name", { ascending: true });
 
   return (
     <div>

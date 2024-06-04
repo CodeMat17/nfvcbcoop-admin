@@ -24,10 +24,21 @@ const IDPage = async ({ params: { id } }: Props) => {
     const { userId } = auth().protect();
     const user = await clerkClient.users.getUser(userId);
 
+    const PRESIDENT = process.env.PRESIDENT;
+    const PAUL = process.env.PAUL;
+    const TONY = process.env.TONY;
+
+    const adminIds = [PRESIDENT, PAUL, TONY];
+    const isNorAdmin = !adminIds.includes(user.id);
+
     // const email = user?.primaryEmailAddress?.emailAddress;
     // const firstName = email?.split("@")[0];
 
     if (!user) return redirect("/sign-in");
+
+    if (isNorAdmin) {
+      redirect("/dashboard");
+    }
 
   const { data, error } = await supabase
     .from("records")

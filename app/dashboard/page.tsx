@@ -1,23 +1,45 @@
 import LoanApplicationCard from "@/components/LoanApplicationCard";
 import { createClient } from "@/utils/supabase/server";
-import {auth, clerkClient} from '@clerk/nextjs/server'
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export const revalidate = 0;
 
 const Dashboard = async () => {
   const supabase = createClient();
-  const { userId } = auth().protect()
-  const user = await clerkClient.users.getUser(userId)
-  
-  const email = user?.primaryEmailAddress?.emailAddress
-  const firstName = email?.split('@')[0]
+  const { userId } = auth().protect();
+  const user = await clerkClient.users.getUser(userId);
 
-  if (!user) return redirect('/sign-in')
+  const email = user?.primaryEmailAddress?.emailAddress;
+  const firstName = email?.split("@")[0];
+
+  const PRESIDENT = process.env.PRESIDENT;
+  const MATTHEW = process.env.MATTHEW; 
+  const CODEMAT = process.env.CODEMAT;
+
+  const PAUL = process.env.PAUL;
+  const TONY = process.env.TONY;
+
+  const updateAdmins = [PAUL, TONY];
+  const isUpdateAdmin = updateAdmins.includes(user.id);
+
+  const knownAdmins = [PRESIDENT, MATTHEW, PAUL, CODEMAT]
+  const notKnownAdmins = !knownAdmins.includes(user.id);
+
+  if (!user) return redirect("/sign-in");
+  if (isUpdateAdmin) return redirect("/dashboard/update");
+
+  if (notKnownAdmins) {
+    return (
+      <div className="text-center text-xl py-28">Hang-on for your role to be defined</div>
+    )
+  }
 
   const { data, error } = await supabase
     .from("records")
-    .select("id, name, phone, total_contributions, loan_status, loan_amount, applied_on")
+    .select(
+      "id, name, phone, total_contributions, loan_status, loan_amount, applied_on"
+    )
     .eq("loan_status", "processing");
 
   return (
@@ -30,7 +52,9 @@ const Dashboard = async () => {
 
       <div className='mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
         {data && data.length < 1 ? (
-          <div className='text-center mt-28'>No loan application at the moment.</div>
+          <div className='text-center mt-28'>
+            No loan application at the moment.
+          </div>
         ) : (
           data?.map((loan) => (
             <LoanApplicationCard

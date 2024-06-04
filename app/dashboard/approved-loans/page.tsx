@@ -13,7 +13,14 @@ const ApprovedLoans = async () => {
   const email = user?.primaryEmailAddress?.emailAddress;
   const firstName = email?.split("@")[0];
 
+   const PAUL = process.env.PAUL;
+   const TONY = process.env.TONY;
+
+   const updateAdmins = [PAUL, TONY];
+   const isUpdateAdmin = updateAdmins.includes(user.id);
+
   if (!user) return redirect("/sign-in");
+   if (isUpdateAdmin) return redirect("/dashboard/update");
 
 const { data, error } = await supabase
   .from("records")
