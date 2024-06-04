@@ -79,7 +79,9 @@ export default function RootLayout({
                   </SignedIn>
                 </div>
               </div>
-              <DropDownMenu />
+              <SignedIn>
+                <DropDownMenu />
+              </SignedIn>
             </div>
             <main>{children}</main>
             <Toaster />
