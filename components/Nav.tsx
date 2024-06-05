@@ -7,16 +7,18 @@ const Nav = async () => {
   const user = await clerkClient.users.getUser(userId);
 
   const PRESIDENT = process.env.PRESIDENT;
+  const AGUNNA = process.env.AGUNNA
+  const ERIJO = process.env.ERIJO;
   const MATTHEW = process.env.MATTHEW;
   const CODEMAT = process.env.CODEMAT;
   const PAUL = process.env.PAUL;
   const TONY = process.env.TONY;
 
-  const superAdmin = [PRESIDENT, MATTHEW];
-  const midAdmin = [CODEMAT];
-  const lowAdmin = [TONY, PAUL];
+  // const superAdmin = [PRESIDENT, MATTHEW];
+  const midAdmin = [AGUNNA, ERIJO, CODEMAT, PRESIDENT, MATTHEW];
+  const lowAdmin = [TONY, PAUL, PRESIDENT, MATTHEW];
 
-  const isSuperAdmin = superAdmin.includes(user.id);
+  // const isSuperAdmin = superAdmin.includes(user.id);
   const isMidAdmin = midAdmin.includes(user.id);
   const isLowAdmin = lowAdmin.includes(user.id);
 
@@ -24,7 +26,7 @@ const Nav = async () => {
     <div className='fixed hidden pl-4 w-44 lg:w-64 h-[calc(100vh-40px)] sm:flex flex-col justify-center items-center gap-4'>
       {/* {superAdmin.includes(user.id) && ( */}
 
-      {isSuperAdmin || isMidAdmin ? (
+      { isMidAdmin ? (
         <NavButton href='/dashboard' tag='Applications' />
       ) : (
         <Button
@@ -35,7 +37,7 @@ const Nav = async () => {
         </Button>
       )}
 
-      {isSuperAdmin || isMidAdmin ? (
+      { isMidAdmin ? (
         <NavButton href='/dashboard/approved-loans' tag='Approved' />
       ) : (
         <Button
@@ -46,7 +48,7 @@ const Nav = async () => {
         </Button>
       )}
 
-      {isSuperAdmin || isLowAdmin ? (
+      { isLowAdmin ? (
         <NavButton href='/dashboard/update' tag='Update' />
       ) : (
         <Button

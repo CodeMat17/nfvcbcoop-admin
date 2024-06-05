@@ -16,6 +16,8 @@ const Dashboard = async () => {
   const PRESIDENT = process.env.PRESIDENT;
   const MATTHEW = process.env.MATTHEW; 
   const CODEMAT = process.env.CODEMAT;
+  const AGUNNA = process.env.AGUNNA;
+  const ERIJO = process.env.ERIJO;
 
   const PAUL = process.env.PAUL;
   const TONY = process.env.TONY;
@@ -23,7 +25,7 @@ const Dashboard = async () => {
   const updateAdmins = [PAUL, TONY];
   const isUpdateAdmin = updateAdmins.includes(user.id);
 
-  const knownAdmins = [PRESIDENT, MATTHEW, PAUL, CODEMAT]
+  const knownAdmins = [PRESIDENT, MATTHEW, PAUL, CODEMAT, AGUNNA, ERIJO];
   const notKnownAdmins = !knownAdmins.includes(user.id);
 
   if (!user) return redirect("/sign-in");

@@ -28,9 +28,10 @@ const IDPage = async ({ params: { id } }: Props) => {
 
     const PRESIDENT = process.env.PRESIDENT;
     const PAUL = process.env.PAUL;
-    const TONY = process.env.TONY;
+  const TONY = process.env.TONY;
+  const MATTHEW = process.env.MATTHEW;
 
-    const adminIds = [PRESIDENT, PAUL, TONY];
+    const adminIds = [PRESIDENT, PAUL, TONY, MATTHEW];
     const isNorAdmin = !adminIds.includes(user.id);
 
     // const email = user?.primaryEmailAddress?.emailAddress;

@@ -16,20 +16,31 @@ export async function DropDownMenu() {
   const user = await clerkClient.users.getUser(userId);
 
   const PRESIDENT = process.env.PRESIDENT;
+  const AGUNNA = process.env.AGUNNA;
+  const ERIJO = process.env.ERIJO;
   const MATTHEW = process.env.MATTHEW;
   const CODEMAT = process.env.CODEMAT;
   const PAUL = process.env.PAUL;
   const TONY = process.env.TONY;
 
-  const superAdmin = [PRESIDENT, MATTHEW];
-  const midAdmin = [CODEMAT];
-  const lowAdmin = [TONY, PAUL];
+  const midAdmin = [AGUNNA, ERIJO, CODEMAT, PRESIDENT, MATTHEW];
+  const lowAdmin = [TONY, PAUL, PRESIDENT, MATTHEW];
 
-  const isSuperAdmin = superAdmin.includes(user.id);
+  // const isSuperAdmin = superAdmin.includes(user.id);
   const isMidAdmin = midAdmin.includes(user.id);
   const isLowAdmin = lowAdmin.includes(user.id);
 
-  const allAdmins = [PRESIDENT, MATTHEW, PAUL, TONY, CODEMAT];
+  const allAdmins = [
+    PRESIDENT,
+    MATTHEW,
+    PAUL,
+    TONY,
+    CODEMAT,
+    AGUNNA,
+    ERIJO,
+    TONY,
+    PAUL,
+  ];
   const noRole = !allAdmins.includes(user.id);
 
   return (
@@ -41,20 +52,19 @@ export async function DropDownMenu() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-56 space-y-8 mb-8'>
-          {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
-          {/* <DropdownMenuSeparator /> */}
+      
           <DropdownMenuGroup>
-            {isSuperAdmin ||
-              (isMidAdmin && (
+            {
+              isMidAdmin && (
                 <Link href='/dashboard' className='cursor-pointer'>
                   <DropdownMenuItem className='my-4 ml-4'>
                     Loan Applications
                   </DropdownMenuItem>
                 </Link>
-              ))}
+              )}
 
-            {isSuperAdmin ||
-              (isMidAdmin && (
+            {
+              isMidAdmin && (
                 <Link
                   href='/dashboard/approved-loans'
                   className='cursor-pointer'>
@@ -62,16 +72,16 @@ export async function DropDownMenu() {
                     Approved Loans
                   </DropdownMenuItem>
                 </Link>
-              ))}
+              )}
 
-            {isSuperAdmin ||
-              (isLowAdmin && (
+            {
+              isLowAdmin && (
                 <Link href='/dashboard/update' className='cursor-pointer'>
                   <DropdownMenuItem className='mb-4 ml-4'>
                     Update Records
                   </DropdownMenuItem>
                 </Link>
-              ))}
+              )}
 
             {noRole && (
               <DropdownMenuItem className='mb-4 ml-4'>
