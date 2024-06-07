@@ -96,7 +96,7 @@ const LoanApplicationCard = ({
     <div className='w-full sm:w bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-md'>
       <div className='px-7 pt-7 pb-3'>
         <p className='text-2xl font-semibold text-red-600'>
-          ₦{amount.toLocaleString()}
+          ₦{amount?.toLocaleString()}
         </p>
         <p className='font-medium'>{name}</p>
         <div className='text-sm text-gray-500 leading-4'>
