@@ -73,7 +73,7 @@ const LoanApplicationCard = ({
 
       const { data, error } = await supabase
         .from("records")
-        .update({ loan_status: "approved", approved_on: currentDateISO, approved_by: username, repay_data: nextUpdateISO })
+        .update({ loan_status: "approved", approved_on: currentDateISO, approved_by: username, repay_date: nextUpdateISO })
         .eq("id", id)
         .select();
 
