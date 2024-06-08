@@ -24,7 +24,7 @@ const ApprovedLoans = async () => {
 
 const { data, error } = await supabase
   .from("records")
-  .select("id, name, phone, total_contributions, loan_status, loan_amount, applied_on, approved_on, approved_by")
+  .select("id, name, phone, total_contributions, loan_status, loan_amount, applied_on, approved_on, approved_by, repay_date")
   .eq("loan_status", "approved");
 
   return (
@@ -51,6 +51,7 @@ const { data, error } = await supabase
               applied={loan.applied_on}
               approved={loan.approved_on}
               approvedby={loan.approved_by}
+              repay={loan.repay_date}
               username={firstName}
             />
           ))

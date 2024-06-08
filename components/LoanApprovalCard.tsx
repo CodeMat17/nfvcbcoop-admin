@@ -18,6 +18,7 @@ type LoanProps = {
   applied: string;
   approved: string;
   approvedby: string;
+  repay: string;
   username: string | undefined;
 };
 
@@ -31,6 +32,7 @@ const LoanApprovalCard = ({
   applied,
   approved,
   approvedby,
+  repay,
   username,
 }: LoanProps) => {
   const supabase = createClient();
@@ -41,6 +43,10 @@ const LoanApprovalCard = ({
 
   // const email = user?.primaryEmailAddress?.emailAddress
   // const firstName = email?.split("@")[0];
+  const today = new Date();
+  const todayISO = today.toISOString();
+
+  const isDeadlineReached = repay ? todayISO >= repay : false
 
   const clearLoan = async () => {
     try {
@@ -53,6 +59,7 @@ const LoanApprovalCard = ({
           loan_amount: null,
           approved_on: currentDateISO,
           cleared_by: username,
+          repay_date: null,
         })
         .eq("id", id)
         .select();
@@ -87,11 +94,18 @@ const LoanApprovalCard = ({
         </div>
       </div>
 
-      <div className='bg-gray-50 dark:bg-gray-950 px-4 py-3 flex justify-between'>
-        <div className='leading-4 text-gray-500 text-sm'>
+      <div
+        className={`${
+          isDeadlineReached ? "bg-red-600" : "bg-gray-50 dark:bg-gray-950"
+        } px-4 py-3 flex items-center justify-between`}>
+        <div
+          className={`${
+            isDeadlineReached ? "text-white" : "text-gray-500"
+          } leading-4 text-sm font-light`}>
           <p>Applied on: {dayjs(applied).format("MMM DD, YYYY")}</p>
           <p>Approved on: {dayjs(approved).format("MMM DD, YYYY")}</p>
           <p>Approved by: {approvedby}</p>
+          <p>Repay on: {dayjs(repay).format("MMM DD, YYYY")}</p>
         </div>
         <Button
           variant='outline'
