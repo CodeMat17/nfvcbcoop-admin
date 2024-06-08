@@ -33,6 +33,10 @@ const LoanApplicationCard = ({
   const router = useRouter();
   const currentDateISO = new Date().toISOString();
 
+  const now = new Date();
+  const nextUpdate = new Date(now.getTime() + 6 * 30 * 24 * 60 * 60 * 1000); // 6 months from now
+  const nextUpdateISO = nextUpdate
+
   const [loadingDecline, setLoadingDecline] = useState(false);
   const [loadingApprove, setLoadingApprove] = useState(false);
 
@@ -69,7 +73,7 @@ const LoanApplicationCard = ({
 
       const { data, error } = await supabase
         .from("records")
-        .update({ loan_status: "approved", approved_on: currentDateISO, approved_by: username })
+        .update({ loan_status: "approved", approved_on: currentDateISO, approved_by: username, repay_data: nextUpdateISO })
         .eq("id", id)
         .select();
 
