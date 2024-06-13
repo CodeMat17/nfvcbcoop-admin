@@ -1,0 +1,9 @@
+{
+  "cron": [
+    {
+      "path": "/api/keepAwake",
+      "schedule": "20 22 * * *"
+     
+    }
+  ]
+}
