@@ -2,10 +2,8 @@
   "cron": [
     {
       "path": "/api/keepAwake",
-      "schedule": "*/1 * * * *",
-      "headers": {
-        "x-cron-secret": "@cron-secret"
-      }
+      "schedule": "*/1 * * * *"
+    
     }
   ]
 }
