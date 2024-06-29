@@ -1,7 +1,9 @@
 import UpdateList from "@/components/UpdateList";
 import { createClient } from "@/utils/supabase/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { redirect } from "next/navigation";
+import AddNewRecordForm from "@/components/AddNewRecordForm";
 
 export const revalidate = 0;
 
@@ -35,11 +37,31 @@ const Update = async () => {
   return (
     <div>
       <h1 className='text-center text-2xl font-semibold mt-2'>
-        UPDATE RECORDS
+        RECORDS
       </h1>
-
-      <div className='mt-10 w-full max-w-md mx-auto'>
-        <UpdateList data={data} />
+      <div className='flex justify-center mt-8'>
+        <Tabs defaultValue='update' className='w-[400px]'>
+          <TabsList className='grid w-full grid-cols-2'>
+            <TabsTrigger
+              value='update'
+              className='border rounded-full py-3 mr-2 shadow-md'>
+              Update Records
+            </TabsTrigger>
+            <TabsTrigger
+              value='add'
+              className='border rounded-full py-3 ml-2 shadow-md'>
+              Add New Record
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value='update' className='mt-8'>
+            <div className='mt-10 w-full max-w-md mx-auto'>
+              <UpdateList data={data} />
+            </div>
+          </TabsContent>
+          <TabsContent value='add' className='mt-8'>
+          <AddNewRecordForm />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

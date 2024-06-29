@@ -36,7 +36,7 @@ const { data, error } = await supabase
       <div className='mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
         {data && data.length < 1 ? (
           <div className='text-center mt-28'>
-            No loan application at the moment.
+            No approved loan at the moment.
           </div>
         ) : (
           data?.map((loan) => (
