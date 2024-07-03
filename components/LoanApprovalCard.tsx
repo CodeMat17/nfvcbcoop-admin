@@ -15,12 +15,13 @@ type LoanProps = {
   total: number;
   status: string;
   amount: number;
-  applied: string;
-  approved: string;
+  applied: Date | null;
+  approved: Date | null;
   approvedby: string;
   repay: string;
   disbursed: boolean;
   username: string | undefined;
+  fetchApprovedLoans: () => void
 };
 
 const LoanApprovalCard = ({
@@ -36,6 +37,7 @@ const LoanApprovalCard = ({
   repay,
   disbursed,
   username,
+  fetchApprovedLoans
 }: LoanProps) => {
   const supabase = createClient();
   const router = useRouter();
@@ -66,7 +68,7 @@ const LoanApprovalCard = ({
 
       if (data) {
         toast.success(`You have confirmed disbursement to ${name}.`);
-        router.refresh();
+       fetchApprovedLoans()
       }
     } catch (error) {
       console.log("ErrorMsg: ", error);
@@ -97,7 +99,7 @@ const LoanApprovalCard = ({
 
       if (data) {
         toast.success("Loan cleared.", {});
-        router.refresh();
+        fetchApprovedLoans()
       }
     } catch (error) {
       console.log("ErrorMsg: ", error);
