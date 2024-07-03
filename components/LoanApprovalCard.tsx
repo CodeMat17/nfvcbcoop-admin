@@ -89,6 +89,7 @@ const LoanApprovalCard = ({
           approved_on: currentDateISO,
           cleared_by: username,
           repay_date: null,
+          disbursed: false,
         })
         .eq("id", id)
         .select();
