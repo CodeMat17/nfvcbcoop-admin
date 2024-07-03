@@ -7,32 +7,35 @@ export const revalidate = 0;
 
 const ApprovedLoans = async () => {
   const supabase = createClient();
-    const { userId } = auth().protect();
+  const { userId } = auth().protect();
   const user = await clerkClient.users.getUser(userId);
-  
+
   const email = user?.primaryEmailAddress?.emailAddress;
   const firstName = email?.split("@")[0];
 
-   const PAUL = process.env.PAUL;
-   const TONY = process.env.TONY;
+  const PAUL = process.env.PAUL;
+  const TONY = process.env.TONY;
 
-   const updateAdmins = [PAUL, TONY];
-   const isUpdateAdmin = updateAdmins.includes(user.id);
+  const updateAdmins = [PAUL, TONY];
+  const isUpdateAdmin = updateAdmins.includes(user.id);
 
   if (!user) return redirect("/sign-in");
-   if (isUpdateAdmin) return redirect("/dashboard/update");
+  if (isUpdateAdmin) return redirect("/dashboard/update");
 
-const { data, error } = await supabase
-  .from("records")
-  .select("id, name, phone, total_contributions, loan_status, loan_amount, applied_on, approved_on, approved_by, repay_date")
-  .eq("loan_status", "approved");
+  const { data, error } = await supabase
+    .from("records")
+    .select(
+      "id, name, phone, total_contributions, loan_status, loan_amount, applied_on, approved_on, approved_by, repay_date, disbursed"
+    )
+    .eq("loan_status", "approved")
+    .order("approved_on", { ascending: false });
 
   return (
     <div>
       <h1 className='text-center text-2xl font-semibold mt-2'>
         APPROVED LOANS
       </h1>
-
+      {/* <pre>{ JSON.stringify(data, null, 2)}</pre> */}
       <div className='mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
         {data && data.length < 1 ? (
           <div className='text-center mt-28'>
@@ -52,6 +55,7 @@ const { data, error } = await supabase
               approved={loan.approved_on}
               approvedby={loan.approved_by}
               repay={loan.repay_date}
+              disbursed={loan.disbursed}
               username={firstName}
             />
           ))

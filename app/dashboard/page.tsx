@@ -14,7 +14,7 @@ const Dashboard = async () => {
   const firstName = email?.split("@")[0];
 
   const PRESIDENT = process.env.PRESIDENT;
-  const MATTHEW = process.env.MATTHEW; 
+  const MATTHEW = process.env.MATTHEW;
   const CODEMAT = process.env.CODEMAT;
   const AGUNNA = process.env.AGUNNA;
   const ERIJO = process.env.ERIJO;
@@ -33,8 +33,10 @@ const Dashboard = async () => {
 
   if (notKnownAdmins) {
     return (
-      <div className="text-center text-xl py-28">Hang-on for your role to be defined</div>
-    )
+      <div className='text-center text-xl py-28'>
+        Hang-on for your role to be defined
+      </div>
+    );
   }
 
   const { data, error } = await supabase
@@ -42,7 +44,8 @@ const Dashboard = async () => {
     .select(
       "id, name, phone, total_contributions, loan_status, loan_amount, applied_on"
     )
-    .eq("loan_status", "processing");
+    .eq("loan_status", "processing")
+    .order("applied_on", { ascending: true });
 
   return (
     <div className=''>

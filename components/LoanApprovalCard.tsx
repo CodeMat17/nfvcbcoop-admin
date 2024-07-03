@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client";
 import dayjs from "dayjs";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, LoaderIcon, SendIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,6 +19,7 @@ type LoanProps = {
   approved: string;
   approvedby: string;
   repay: string;
+  disbursed: boolean;
   username: string | undefined;
 };
 
@@ -33,6 +34,7 @@ const LoanApprovalCard = ({
   approved,
   approvedby,
   repay,
+  disbursed,
   username,
 }: LoanProps) => {
   const supabase = createClient();
@@ -40,13 +42,38 @@ const LoanApprovalCard = ({
   const currentDateISO = new Date().toISOString();
 
   const [loading, setLoading] = useState(false);
+  const [disburseLoading, setDisburseLoading] = useState(false);
 
   // const email = user?.primaryEmailAddress?.emailAddress
   // const firstName = email?.split("@")[0];
   const today = new Date();
   const todayISO = today.toISOString();
 
-  const isDeadlineReached = repay ? todayISO >= repay : false
+  const isDeadlineReached = repay ? todayISO >= repay : false;
+
+  const disburse = async () => {
+    try {
+      setDisburseLoading(true);
+      const { data, error } = await supabase
+        .from("records")
+        .update({ disbursed: true })
+        .eq("id", id)
+        .select();
+
+      if (error) {
+        toast.error("Something went wrong.", {});
+      }
+
+      if (data) {
+        toast.success(`You have confirmed disbursement to ${name}.`);
+        router.refresh();
+      }
+    } catch (error) {
+      console.log("ErrorMsg: ", error);
+    } finally {
+      setDisburseLoading(false);
+    }
+  };
 
   const clearLoan = async () => {
     try {
@@ -69,9 +96,7 @@ const LoanApprovalCard = ({
       }
 
       if (data) {
-        toast.success("Loan cleared.", {
-          // description: {`${todaysDate}`}
-        });
+        toast.success("Loan cleared.", {});
         router.refresh();
       }
     } catch (error) {
@@ -83,7 +108,7 @@ const LoanApprovalCard = ({
 
   return (
     <div className='w-full sm:w bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-md'>
-      <div className='px-7 pt-7 pb-3'>
+      <div className='relative px-7 pt-7 pb-3'>
         <p className='text-2xl font-semibold text-green-600'>
           ₦{amount.toLocaleString()}
         </p>
@@ -92,6 +117,21 @@ const LoanApprovalCard = ({
           <p>09087653421</p>
           <p>Total Cont.: ₦{total.toLocaleString()}</p>
         </div>
+        {!disbursed && (
+          <Button
+            onClick={disburse}
+            size='icon'
+            variant='outline'
+            className='py-2 text-sm absolute bottom-2 right-4'>
+          {disburseLoading ? <LoaderIcon className="animate-spin" /> : <SendIcon className='w-5 h-5' />}  
+          </Button>
+        )}
+        <p
+          className={`absolute top-3 right-4 text-sm ${
+            disbursed ? "text-gray-500" : "text-rose-500"
+          } `}>
+          {disbursed ? "Disbursed" : "Not disbursed"}
+        </p>
       </div>
 
       <div
